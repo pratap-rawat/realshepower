@@ -1,0 +1,5 @@
+@font-face {
+  font-family: "AguafinaScript-Regular";
+  /*src: url( ../fonts/font.eot ); */ /* IE */
+  src: local("AguafinaScript-Regular"), url("../fonts/AguafinaScript-Regular.ttf") format("truetype"); /*non-IE*/
+}

@@ -1,0 +1,38 @@
+.py-100{
+	padding: 25px 0px;
+}
+
+@media (min-width: 576px){
+	.py-100{
+			padding: 50px 0px;
+	}		
+}
+
+@media (min-width: 992px){
+	.py-100{
+			padding: 100px 0px;
+	}		
+}
+
+.py-60{
+	padding: 30px 0px;
+}
+
+@media (min-width: 768px){
+	.py-60{
+			padding: 60px 0px;
+	}		
+}
+
+
+.bg-color{
+	background-color: #664f96;
+}
+
+@media (min-width: 768px){
+	.hero-section .banner-content .content-wrapper h2{
+	font-size: 50px;
+	margin-bottom: 40px;
+	}	
+}
+
