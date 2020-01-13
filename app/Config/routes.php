@@ -19,6 +19,8 @@
 
 	Router::connect('/admin', array('controller' => 'users', 'action' => 'dashboard', 'admin'=>true));
 
+	Router::connect('/admin', array('controller' => 'pages', 'action' => 'publication'));
+
 
 /**
  * Load all plugin routes. See the CakePlugin documentation on
