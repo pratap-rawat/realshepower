@@ -56,6 +56,14 @@ class EmailConfig {
 		//'charset' => 'utf-8',
 		//'headerCharset' => 'utf-8',
 	);
+	
+	public $gmail = array(
+        'host' => 'ssl://smtp.gmail.com',
+        'port' => 465,
+        'username' => 'aapnaemailtester@gmail.com',
+        'password' => '0210@Email',
+        'transport' => 'Smtp'
+    );
 
 	public $fast = array(
 		'from' => 'you@localhost',

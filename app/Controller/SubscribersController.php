@@ -1,12 +1,12 @@
 <?php
-
+App::uses('CakeEmail', 'Network/Email');
 App::uses('AppController', 'Controller');
 
 class SubscribersController extends AppController {
 
 	public $components = array('Session','Cookie');
 
-	public $uses = array('Subscriber');
+	public $uses = array('Subscriber', 'CakeEmail');
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -20,8 +20,23 @@ class SubscribersController extends AppController {
             $dataSet = $this->request->data;
 
             //echo '<pre>'; print_r($dataSet); die;
-            
+            $email = $dataSet['Subscriber']['email'];
             if ($this->Subscriber->save($dataSet)) {
+				$Email 		= 	new CakeEmail('gmail');
+				$to			=	"pratapsinghg2@gmail.com";
+				$subject	=	"New user subscription";
+				$mail		=	"<p>Hi Admin</p>";
+				$mail		.=	"<p>Greetings</p>";
+				$mail		.=	"<p></p>";
+				$mail		.=	"<p>New user (".$email.") has been subscribed in RealShePower.com</p>";
+				$mail		.=	"<p>regards</p>";
+				$mail		.=	"<p>RealShePower</p>";
+
+				$Email->from(array('admin@realshepower.com' => 'RealShePower'))
+					  ->to($to)
+					  ->emailFormat('both')
+					  ->subject($subject)
+					  ->send($mail);
                 return $this->redirect(array('controller' => 'pages' , 'action' => 'home', 1));
             } else {
                 return $this->redirect(array('controller' => 'pages' , 'action' => 'home', 0));
