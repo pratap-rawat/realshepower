@@ -76,7 +76,7 @@
 					</div>
 					<div class="social_share">
 						<p>Share :</p>
-						<a href="#"><i class="fab fa-facebook-f"></i></a>
+						<a href="#" onclick="sharethisToFB('<?php echo Router::url(null, true); ?>');"><i class="fab fa-facebook-f"></i></a>
 						<a href="#"><i class="fab fa-twitter"></i></a>
 						<a href="#"><i class="fab fa-whatsapp"></i></a>
 					</div>

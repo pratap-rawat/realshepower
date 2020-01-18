@@ -31,4 +31,31 @@
   </script>
   <?php echo $this->Html->script('script.js'); ?>
 </body>
+<!-- Start : Social Share With Facebook -->
+<script>
+	  window.fbAsyncInit = function() {
+	    FB.init({
+	      appId            : '528118908102267',
+	      autoLogAppEvents : true,
+	      xfbml            : true,
+	      version          : 'v5.0'
+	    });
+	};
+</script>
+
+<script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
+
+<script type="text/javascript">
+	function sharethisToFB(url) {
+		FB.ui({
+		  method: 'share',
+		  href: url
+		  //quote: "Hi, Pratap",
+		  //hashtag:"#Pratap"
+		}, function(response){
+			console.log(response);
+		});
+	}
+</script>
+<!-- Start : Social Share With Facebook -->
 </html>

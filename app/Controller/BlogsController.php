@@ -3,14 +3,14 @@ App::uses('AppController', 'Controller');
 
 class BlogsController extends AppController
 {
-
+    public $components = array('Email','Session','Cookie');
     public $uses = array('Post', 'Category', 'Like', 'Comment', 'leaveComment');
 
     public function beforeFilter()
     {
         parent::beforeFilter();
         // Allow users to register and logout.
-        $this->Auth->allow('index', 'loadMorePosts', 'postdetail');
+        $this->Auth->allow('index', 'loadMorePosts', 'postdetail','sendmail');
         echo $this->request->prefix;
     }
 
@@ -111,5 +111,11 @@ class BlogsController extends AppController
         }
     }
 
+    public function sendmail()
+    {
+        $userData['email']="vivekvsms@gmail.com";
+        $userData['username']="Vivek";
+        $activation_key = $this->Email->sendSignupActivationEmail($userData);
+    }
 
 }
