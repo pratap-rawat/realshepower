@@ -28,7 +28,7 @@
 					<div class="row">
 						<div class="col-md-6 form-group">
 						<label for="email">Alternate Email Id </label>
-							<?php echo $this->Form->input('alternate_email1', array('label'=>false,'type'=>'email','class'=>'form-control')) ?>
+							<?php echo $this->Form->input('alternate_email1', array('label'=>false,'type'=>'email','class'=>'form-control', 'value'=>$userProfile['alternate_email1'])) ?>
 						</div>
 						<div class="col-md-6 form-group">
 							<label for="phone">Mobile No. <span class="danger">*</span></label>
@@ -43,7 +43,7 @@
 						</div>
 						<div class="col-md-6 form-group">
 							<label for="phone">Address</label>
-							<?php echo $this->Form->input('address', array('label'=>false,'type'=>'number','class'=>'form-control','placeholder'=>'Enter address.', 'value'=>$userProfile['address'])) ?>
+							<?php echo $this->Form->input('address', array('label'=>false,'type'=>'text','class'=>'form-control','placeholder'=>'Enter address.', 'value'=>$userProfile['address'])) ?>
 						</div>
 					</div>
 
