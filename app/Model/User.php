@@ -131,7 +131,7 @@ class User extends AppModel {
     {
         if(!empty($id)) {
             return $this->find('first', array(
-                'fields' => array('User.id', 'User.first_name', 'User.last_name', 'User.gender', 'User.username', 'User.profile_image', 'User.email', 'User.role', 'User.mobile', 'User.created'),
+                'fields' => array('User.id', 'User.first_name', 'User.last_name', 'User.gender', 'User.username','User.alternate_email1','User.address', 'User.profile_image', 'User.email', 'User.role', 'User.mobile', 'User.created','User.about_self'),
                 'conditions' => array('User.id' => $id), 
                 'recursive' => -1)
             );

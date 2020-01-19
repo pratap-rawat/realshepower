@@ -141,12 +141,18 @@ class FrontendUsersController extends AppController
 
     public function dashboard()
     {
-        $this->set('userProfile', $this->Auth->user());
+        $userData = $this->Auth->user();
+		$id = $userData['id'];
+		$userinfo=$this->User->getUserById($id);
+        $this->set('userProfile', $userinfo['User']);
     }
 
     public function profile()
     {
-        $this->set('userProfile', $this->Auth->user());
+		$userData = $this->Auth->user();
+		$id = $userData['id'];
+		$userinfo=$this->User->getUserById($id);
+        $this->set('userProfile', $userinfo['User']);
     }
 
     public function editprofile()
@@ -191,8 +197,9 @@ class FrontendUsersController extends AppController
         } else {
             $this->Session->setFlash(__('User does not exist.', null), 'default', array('class' => 'alert alert-danger fade in'));
             $this->redirect(array('action' => 'profile'));
-        }
+		}
 
-        $this->set('userProfile', $this->Auth->user());
+		$userinfo=$this->User->getUserById($id);
+        $this->set('userProfile', $userinfo['User']);
     }
 }
