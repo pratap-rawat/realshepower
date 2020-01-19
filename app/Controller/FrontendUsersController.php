@@ -138,4 +138,61 @@ class FrontendUsersController extends AppController
 
         return array('status' => true);
     }
+
+    public function dashboard()
+    {
+        $this->set('userProfile', $this->Auth->user());
+    }
+
+    public function profile()
+    {
+        $this->set('userProfile', $this->Auth->user());
+    }
+
+    public function editprofile()
+    {
+        $userData = $this->Auth->user();
+        $id = $userData['id'];
+        $this->User->id = $id;
+        if ($this->User->exists()) {
+            if ($this->request->is('post') || $this->request->is('put')) {
+                $dataSet = $this->request->data;
+
+                //Check if profile image has been uploaded
+                if (!empty($dataSet['profile_image']['name'])) {
+                    $file = $dataSet['profile_image']; //put the data into a var for easy use
+
+                    $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
+                    $arr_ext = array('jpg', 'jpeg', 'png'); //set allowed extensions
+
+                    //only process if the extension is valid
+                    if (in_array($ext, $arr_ext)) {
+                        $rand_name = str_shuffle("abcdefghijklmnopqrstuvwxyz") . '-' . rand(11111, 99999);
+                        //do the actual uploading of the file. First arg is the tmp name, second arg is where we are putting it
+                        move_uploaded_file($file['tmp_name'], WWW_ROOT . 'img/frontend_images/user/' . 'user_' . $rand_name . '_profile_image.' . $ext);
+
+                        $dataSet['profile_image'] = 'user_' . $rand_name . '_profile_image.' . $ext;
+                    } else {
+                        $this->Session->setFlash(__('Please Upload Only JPG|JPEG|PNG Extension Image.', null), 'default', array('class' => 'alert alert-danger fade in'));
+                        $this->redirect(array('action' => 'profile', $id));
+                    }
+                } else {
+                    unset($dataSet['profile_image']);
+                }
+
+                if ($this->User->save($dataSet)) {
+                    $this->Session->setFlash(__('User has been successfully updated', null), 'default', array('class' => 'alert alert-success fade in'));
+                    $this->redirect(array('action' => 'profile'));
+                } else {
+                    $this->Session->setFlash(__('Unable to Update User. Please, try again.', null), 'default', array('class' => 'alert alert-danger fade in'));
+                    $this->redirect(array('action' => 'profile'));
+                }
+            }
+        } else {
+            $this->Session->setFlash(__('User does not exist.', null), 'default', array('class' => 'alert alert-danger fade in'));
+            $this->redirect(array('action' => 'profile'));
+        }
+
+        $this->set('userProfile', $this->Auth->user());
+    }
 }

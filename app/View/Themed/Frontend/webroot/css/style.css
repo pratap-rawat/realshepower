@@ -1491,3 +1491,7 @@ span.active_form{
     right: 22px;
     color: #664f96;
 }
+
+.danger{
+    color: red;
+}
