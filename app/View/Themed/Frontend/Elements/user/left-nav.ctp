@@ -30,11 +30,18 @@
 		<nav class="dashboard_navi">
 			<ul>
 				<li>
+					<?php echo $this->Html->link('Dashboard', array('controller'=>'FrontendUsers', 'action'=>'dashboard' )) ?>	
+				</li>
+				<li>
 					<?php echo $this->Html->link('Profile', array('controller'=>'FrontendUsers', 'action'=>'profile' )) ?>	
 				</li>
 				<!-- <li><a href="#">my wallet</a></li> -->
-				<li><a href="#">blog likes</a></li>
-				<li><a href="#">blogs</a></li>
+				<?php if(strtolower($userProfile['gender'] !='male')){  ?>
+				<li>
+				<?php echo $this->Html->link('Blogs', array('controller'=>'FrontendUsers', 'action'=>'addBlog' )) ?>	
+				</li>
+				<?php }?>
+				<li><a href="#">Change Password</a></li>
 				<li><?php echo $this->Html->link('Logout', '/logout'); ?></li>
 			</ul>
 		</nav>

@@ -7,7 +7,7 @@ class FrontendUsersController extends AppController
 
     public $components = array('Session', 'Cookie');
 
-    public $uses = array('User');
+    public $uses = array('User','Category','Post');
 
     public function beforeFilter()
     {
@@ -145,6 +145,7 @@ class FrontendUsersController extends AppController
 		$id = $userData['id'];
 		$userinfo=$this->User->getUserById($id);
         $this->set('userProfile', $userinfo['User']);
+        $this->set('title', COMPANY_NAME . ' - Dashboard');
     }
 
     public function profile()
@@ -153,6 +154,7 @@ class FrontendUsersController extends AppController
 		$id = $userData['id'];
 		$userinfo=$this->User->getUserById($id);
         $this->set('userProfile', $userinfo['User']);
+        $this->set('title', COMPANY_NAME . ' - Profile');
     }
 
     public function editprofile()
@@ -197,9 +199,81 @@ class FrontendUsersController extends AppController
         } else {
             $this->Session->setFlash(__('User does not exist.', null), 'default', array('class' => 'alert alert-danger fade in'));
             $this->redirect(array('action' => 'profile'));
-		}
+        }
+        
+        $this->set('title', COMPANY_NAME . ' - Change Profile');
 
 		$userinfo=$this->User->getUserById($id);
         $this->set('userProfile', $userinfo['User']);
+    }
+
+    public function addBlog()
+    {
+        $userData = $this->Auth->user();
+        $id = $userData['id'];
+        $userinfo=$this->User->getUserById($id);
+        
+        if(strtolower($userinfo['User']['gender'])=='male'){
+            return $this->redirect(array('action' => 'dashboard'));
+        }
+
+        if ($this->request->is('post')) {
+            $this->Post->create();
+            $dataSet = $this->request->data;
+
+            if(!empty($dataSet['valueForYourForm'])){
+                $tags =  json_encode(explode(',', $dataSet['valueForYourForm']));
+                $dataSet['tags'] = $tags;
+            }else{
+                unset($dataSet['tags']);
+            }
+            unset($dataSet['valueForYourForm']);
+            $dataSet['user_id']=$id;
+
+            //echo '<pre>'; print_r($tags); die;
+
+            //Check if profile image has been uploaded
+            if(!empty($dataSet['featured_image']['name']))
+            {
+                $file = $dataSet['featured_image']; //put the data into a var for easy use
+
+                $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
+                $arr_ext = array('jpg', 'jpeg', 'png'); //set allowed extensions
+
+                //only process if the extension is valid
+                if(in_array($ext, $arr_ext))
+                {
+                    $rand_name = str_shuffle("abcdefghijklmnopqrstuvwxyz") . '-' .rand(11111,99999);
+                        //do the actual uploading of the file. First arg is the tmp name, second arg is where we are putting it
+                        move_uploaded_file($file['tmp_name'], WWW_ROOT . 'img/posts/' . 'post_' .$rand_name.'_featured_image.'.$ext);
+
+                        //prepare the filename for database entry
+                        //$dataSet['featured_image'] = $file['name'];
+                        $dataSet['featured_image'] = 'post_'.$rand_name.'_featured_image.'.$ext;
+                }else{
+                    $this->Session->setFlash(__('Please Upload Only JPG|JPEG|PNG Extension Image.', null), 'default', array('class' => 'alert alert-danger fade in'));
+                }
+            }else{
+                unset($dataSet['featured_image']);
+            }
+
+            if ($this->Post->save($dataSet)) {
+                $this->Session->setFlash(__('Your blog has been successfully post', null), 'default', array('class' => 'alert alert-success fade in'));
+                try {
+                   // $this->__sendNewUserEmail($dataSet);
+                }  catch (Exception $ex) {
+                    $this->Session->setFlash(__($ex->getMessage()), 'default', array('class' => 'alert alert-danger fade in'));
+                }
+                return $this->redirect(array('action' => 'addBlog'));
+            } else {
+                $this->Session->setFlash(__('The Blog could not be Submitted. Please, try again.'), 'default', array('class' => 'alert alert-danger fade in'));
+            }
+        }
+
+        $this->set('title', COMPANY_NAME . ' - Post Blog');
+        
+        $this->set('userProfile', $userinfo['User']);
+        $allCategories = $this->Category->findAllCategoriesList();
+        $this->set('categories', $allCategories);
     }
 }

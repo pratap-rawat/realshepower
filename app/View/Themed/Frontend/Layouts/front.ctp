@@ -56,6 +56,33 @@
 			console.log(response);
 		});
 	}
+
+  var values = [];
+  $("#add-label").on("click", function(e) {
+      var i = 0;
+      e.preventDefault();
+      var _val = $("#text-field").val();
+      if(_val !== '') {
+        _val = _val.trim();
+        _val = _val.toLowerCase();
+        if(values.indexOf(_val) < 0){
+          values.push(_val);
+            $("#label-box").append('<label class="label"><span>'+ _val +'</span><span class="close-label">x</span></label>');
+            $("#text-field").val('');
+            var labelInput = $("#labelInput").val();
+            if(labelInput == '') {
+                $("#labelInput").val(_val);
+            } else {
+                var newVal = labelInput + ',' + _val;                    
+                $("#labelInput").val(newVal);
+            }               
+              i++; 
+        }else{
+          alert('"' +_val + '" tag is already exist.');
+              $("#text-field").val('');
+        }
+      }
+  });
 </script>
 <!-- Start : Social Share With Facebook -->
 </html>
