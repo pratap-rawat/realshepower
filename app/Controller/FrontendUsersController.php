@@ -60,7 +60,7 @@ class FrontendUsersController extends AppController
             'message' => 'Enter valid mail address'
             ));*/
 
-            //echo '<pre>'; print_r($dataSet); die;
+            //  echo '<pre>'; print_r($dataSet); die;
             if ($this->User->save($dataSet)) {
                 //pr($this->User->read()); die;
                 if ($this->Auth->login($this->User->read())) {
@@ -189,10 +189,10 @@ class FrontendUsersController extends AppController
                 }
 
                 if ($this->User->save($dataSet)) {
-                    $this->Session->setFlash(__('User has been successfully updated', null), 'default', array('class' => 'alert alert-success fade in'));
+                    $this->Session->setFlash(__('Password has been successfully updated', null), 'default', array('class' => 'alert alert-success fade in'));
                     $this->redirect(array('action' => 'profile'));
                 } else {
-                    $this->Session->setFlash(__('Unable to Update User. Please, try again.', null), 'default', array('class' => 'alert alert-danger fade in'));
+                    $this->Session->setFlash(__('Unable to Update password. Please, try again.', null), 'default', array('class' => 'alert alert-danger fade in'));
                     $this->redirect(array('action' => 'profile'));
                 }
             }
@@ -275,5 +275,40 @@ class FrontendUsersController extends AppController
         $this->set('userProfile', $userinfo['User']);
         $allCategories = $this->Category->findAllCategoriesList();
         $this->set('categories', $allCategories);
+    }
+
+    public function changePassword()
+    {
+        $userData = $this->Auth->user();
+        $id = $userData['id'];
+        $this->User->id = $id;
+        if ($this->User->exists()) {
+            if ($this->request->is('post') || $this->request->is('put')) {
+                $dataSet = $this->request->data;
+                if ($this->data['FrontendUsers']['password'] !== $this->data['FrontendUsers']['confirm_password']) {
+                 
+                    $this->Session->setFlash(__('Confirm password must match Password  .', null), 'default', array('class' => 'alert alert-danger fade in'));
+                    
+                }
+                $encPass = AuthComponent::password($dataSet['FrontendUsers']['password']);
+                $dataSet['User']['password']=$dataSet['FrontendUsers']['password'];
+                unset($dataSet['FrontendUsers']['confirm_password']);
+                if ($this->User->save($dataSet)) {
+                    $this->Session->setFlash(__('Password has been successfully updated', null), 'default', array('class' => 'alert alert-success fade in'));
+                    $this->redirect(array('action' => 'dashboard'));
+                } else {
+                    $this->Session->setFlash(__('Unable to edit password. Please, try again.', null), 'default', array('class' => 'alert alert-danger fade in'));
+                    $this->redirect(array('action' => 'changePassword'));
+                }
+            }
+        } else {
+            $this->Session->setFlash(__('User does not exist.', null), 'default', array('class' => 'alert alert-danger fade in'));
+            $this->redirect(array('action' => 'profile'));
+        }
+        
+        $this->set('title', COMPANY_NAME . ' - Change Profile');
+
+        $userinfo=$this->User->getUserById($id);
+        $this->set('userProfile', $userinfo['User']);
     }
 }

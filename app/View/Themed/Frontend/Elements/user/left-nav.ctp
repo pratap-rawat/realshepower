@@ -41,7 +41,9 @@
 				<?php echo $this->Html->link('Blogs', array('controller'=>'FrontendUsers', 'action'=>'addBlog' )) ?>	
 				</li>
 				<?php }?>
-				<li><a href="#">Change Password</a></li>
+				<li>
+				<?php echo $this->Html->link('Change Password', array('controller'=>'FrontendUsers', 'action'=>'changePassword' )) ?>	
+				</li>
 				<li><?php echo $this->Html->link('Logout', '/logout'); ?></li>
 			</ul>
 		</nav>

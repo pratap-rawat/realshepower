@@ -8,6 +8,7 @@
 			<!-- /.col-md-3 -->
 			<div class="col-md-9">
 				<div class="rsp_dashboard_content">
+				<?php echo $this->Session->flash(); ?>
 					<h4>Dashboard</h4>
 					
 				</div>
