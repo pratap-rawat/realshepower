@@ -56,7 +56,7 @@
 						</div>
 						<!-- /.rsp_textarea -->
 						<div class="rsp_input_file">
-							<label for="image"><i class="fas fa-images"></i></label>
+							<label for="image"><i class="fas fa-images"></i> <span class="danger">*</span> </label>
 							<?php echo $this->Form->input('featured_image', array('label'=>false, 'class'=>'d-none','type'=>'file', 'id'=>'image','required'=>'true')) ?>
 						</div>
 						<!-- /.rsp_input_file -->
