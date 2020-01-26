@@ -78,6 +78,7 @@ class FrontendUsersController extends AppController
             return json_encode($output, true);
         }
     }
+    
 
     public function login()
     {
@@ -257,17 +258,24 @@ class FrontendUsersController extends AppController
                 unset($dataSet['featured_image']);
             }
 
-            if ($this->Post->save($dataSet)) {
-                $this->Session->setFlash(__('Your blog has been successfully post', null), 'default', array('class' => 'alert alert-success fade in'));
-                try {
-                   // $this->__sendNewUserEmail($dataSet);
-                }  catch (Exception $ex) {
-                    $this->Session->setFlash(__($ex->getMessage()), 'default', array('class' => 'alert alert-danger fade in'));
+            if ($this->Post->validates()) {
+                if ($this->Post->save($dataSet)) {
+                    $this->Session->setFlash(__('Your blog has been successfully post', null), 'default', array('class' => 'alert alert-success fade in'));
+                    try {
+                       // $this->__sendNewUserEmail($dataSet);
+                    }  catch (Exception $ex) {
+                        $this->Session->setFlash(__($ex->getMessage()), 'default', array('class' => 'alert alert-danger fade in'));
+                    }
+                    return $this->redirect(array('action' => 'addBlog'));
+                } else {
+                    $this->Session->setFlash(__('The Blog could not be Submitted. Please, try again.'), 'default', array('class' => 'alert alert-danger fade in'));
                 }
-                return $this->redirect(array('action' => 'addBlog'));
             } else {
-                $this->Session->setFlash(__('The Blog could not be Submitted. Please, try again.'), 'default', array('class' => 'alert alert-danger fade in'));
+                $errors = $this->ModelName->validationErrors;
+                echo $errors;
             }
+
+            
         }
 
         $this->set('title', COMPANY_NAME . ' - Post Blog');
