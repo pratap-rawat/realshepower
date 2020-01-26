@@ -60,8 +60,15 @@ class FrontendUsersController extends AppController
             'message' => 'Enter valid mail address'
             ));*/
 
+            $checkUserExistance = $this->User->find('count', array('conditions' => array('username' => $dataSet['User']['username'])));
+
+            unset($dataSet['FrontendUsers']);
             //echo '<pre>'; print_r($dataSet); die;
-            if ($this->User->save($dataSet)) {
+
+            if($checkUserExistance){
+                $output['status'] = false;
+                $output['message'] = 'Email already exist';
+            } else if ($this->User->save($dataSet)) {
                 //pr($this->User->read()); die;
                 if ($this->Auth->login($this->User->read())) {
                     $output['status'] = true;
