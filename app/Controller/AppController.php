@@ -37,7 +37,7 @@ class AppController extends Controller {
                 )
             );
             $this->Auth->loginAction = array('controller' => 'pages', 'action' => 'home');
-            $this->Auth->loginRedirect = array('controller' => 'pages', 'action' => 'aboutus');
+            $this->Auth->loginRedirect = array('controller' => 'FrontendUsers', 'action' => 'dashboard');
             $this->Auth->logoutRedirect = array('controller' => 'pages', 'action' => 'home');
         }
     }

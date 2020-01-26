@@ -6,6 +6,19 @@ App::uses('BlowfishPasswordHasher', 'Controller/Component/Auth');
 class FrontendUser extends AppModel {
     // public $recursive = 0;
 
+    public $validate = array(
+
+        'password' => array(
+            'notempty' => array(
+                'rule' => array('notempty'),                            
+            ),
+            'confirm_password'=>array(
+                'rule'=>array('confirm_password'),
+                'message'=>'Confirm password must match Password',                         
+            ),    
+        ),      
+    );
+
     /*public $validate = array(
         'username' => array(
             'required' => array(
