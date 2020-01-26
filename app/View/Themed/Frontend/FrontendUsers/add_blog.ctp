@@ -52,7 +52,7 @@
 
 						<div class="rsp_textarea">
 							<label >Description</label>
-							<?php echo $this->Form->input('description', array('label'=>false, 'type'=>'textarea','placeholder'=>'Share something about your self','cols'=>'30','rows'=>'10')) ?>
+							<?php echo $this->Form->input('description', array('label'=>false, 'type'=>'textarea','placeholder'=>'Share something about your self','cols'=>'30','rows'=>'10','id' => 'editor')) ?>
 						</div>
 						<!-- /.rsp_textarea -->
 						<div class="rsp_input_file">

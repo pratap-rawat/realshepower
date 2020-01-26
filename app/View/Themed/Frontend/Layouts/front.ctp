@@ -1,3 +1,15 @@
+<?php
+  $posts_module = false;
+  $currentControllerName = $this->params['controller'];
+  $currentActionName = $this->params['action'];
+  $controllers = array('FrontendUsers');
+  $actions = array('addBlog');
+  if(in_array($currentControllerName, $controllers) && in_array($currentActionName, $actions))
+  {
+    $posts_module = true;
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,6 +42,16 @@
     var base_url = '<?php echo $this->webroot;?>';
   </script>
   <?php echo $this->Html->script('script.js'); ?>
+  <?php
+    if($posts_module === true)
+    {
+  ?>
+      <?php echo $this->Html->script('ckeditor/ckeditor.js'); ?>
+      <?php echo $this->Html->script('ckeditor/sample.js'); ?>
+      <script> initSample(); </script>
+  <?php
+    }
+  ?>
 </body>
 <!-- Start : Social Share With Facebook -->
 <script>
