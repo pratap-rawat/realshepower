@@ -47,7 +47,7 @@
           <?php echo $this->Html->image('frontend_images/arrow-sign-used.png', array('alt' => 'arrow-sign-used')); ?>
       </a>&nbsp;
       <?php if($userAuth): ?>
-        <?php echo $this->Html->link('Logout', '/logout',array('class' => 'btn action-btn')); ?>
+        <?php echo $this->Html->link('Dashboard', '/dashboard',array('class' => 'btn action-btn')); ?>
       <?php endif; ?>
     </div>
   </nav>

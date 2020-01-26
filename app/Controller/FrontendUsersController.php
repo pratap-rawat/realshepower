@@ -7,7 +7,7 @@ class FrontendUsersController extends AppController
 
     public $components = array('Session', 'Cookie');
 
-    public $uses = array('User');
+    public $uses = array('User','Category','Post');
 
     public function beforeFilter()
     {
@@ -85,6 +85,7 @@ class FrontendUsersController extends AppController
             return json_encode($output, true);
         }
     }
+    
 
     public function login()
     {
@@ -144,5 +145,187 @@ class FrontendUsersController extends AppController
         }
 
         return array('status' => true);
+    }
+
+    public function dashboard()
+    {
+        $userData = $this->Auth->user();
+		$id = $userData['id'];
+		$userinfo=$this->User->getUserById($id);
+        $this->set('userProfile', $userinfo['User']);
+        $this->set('title', COMPANY_NAME . ' - Dashboard');
+    }
+
+    public function profile()
+    {
+		$userData = $this->Auth->user();
+		$id = $userData['id'];
+		$userinfo=$this->User->getUserById($id);
+        $this->set('userProfile', $userinfo['User']);
+        $this->set('title', COMPANY_NAME . ' - Profile');
+    }
+
+    public function editprofile()
+    {
+        $userData = $this->Auth->user();
+        $id = $userData['id'];
+        $this->User->id = $id;
+        if ($this->User->exists()) {
+            if ($this->request->is('post') || $this->request->is('put')) {
+                $dataSet = $this->request->data;
+
+                //Check if profile image has been uploaded
+                if (!empty($dataSet['profile_image']['name'])) {
+                    $file = $dataSet['profile_image']; //put the data into a var for easy use
+
+                    $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
+                    $arr_ext = array('jpg', 'jpeg', 'png'); //set allowed extensions
+
+                    //only process if the extension is valid
+                    if (in_array($ext, $arr_ext)) {
+                        $rand_name = str_shuffle("abcdefghijklmnopqrstuvwxyz") . '-' . rand(11111, 99999);
+                        //do the actual uploading of the file. First arg is the tmp name, second arg is where we are putting it
+                        move_uploaded_file($file['tmp_name'], WWW_ROOT . 'img/frontend_images/user/' . 'user_' . $rand_name . '_profile_image.' . $ext);
+
+                        $dataSet['profile_image'] = 'user_' . $rand_name . '_profile_image.' . $ext;
+                    } else {
+                        $this->Session->setFlash(__('Please Upload Only JPG|JPEG|PNG Extension Image.', null), 'default', array('class' => 'alert alert-danger fade in'));
+                        $this->redirect(array('action' => 'profile', $id));
+                    }
+                } else {
+                    unset($dataSet['profile_image']);
+                }
+
+                if ($this->User->save($dataSet)) {
+                    $this->Session->setFlash(__('Password has been successfully updated', null), 'default', array('class' => 'alert alert-success fade in'));
+                    $this->redirect(array('action' => 'profile'));
+                } else {
+                    $this->Session->setFlash(__('Unable to Update password. Please, try again.', null), 'default', array('class' => 'alert alert-danger fade in'));
+                    $this->redirect(array('action' => 'profile'));
+                }
+            }
+        } else {
+            $this->Session->setFlash(__('User does not exist.', null), 'default', array('class' => 'alert alert-danger fade in'));
+            $this->redirect(array('action' => 'profile'));
+        }
+        
+        $this->set('title', COMPANY_NAME . ' - Change Profile');
+
+		$userinfo=$this->User->getUserById($id);
+        $this->set('userProfile', $userinfo['User']);
+    }
+
+    public function addBlog()
+    {
+        $userData = $this->Auth->user();
+        $id = $userData['id'];
+        $userinfo=$this->User->getUserById($id);
+        
+        if(strtolower($userinfo['User']['gender'])=='male'){
+            return $this->redirect(array('action' => 'dashboard'));
+        }
+
+        if ($this->request->is('post')) {
+            $this->Post->create();
+            $dataSet = $this->request->data;
+
+            if(!empty($dataSet['valueForYourForm'])){
+                $tags =  json_encode(explode(',', $dataSet['valueForYourForm']));
+                $dataSet['tags'] = $tags;
+            }else{
+                unset($dataSet['tags']);
+            }
+            unset($dataSet['valueForYourForm']);
+            $dataSet['user_id']=$id;
+
+            //echo '<pre>'; print_r($tags); die;
+
+            //Check if profile image has been uploaded
+            if(!empty($dataSet['featured_image']['name']))
+            {
+                $file = $dataSet['featured_image']; //put the data into a var for easy use
+
+                $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
+                $arr_ext = array('jpg', 'jpeg', 'png'); //set allowed extensions
+
+                //only process if the extension is valid
+                if(in_array($ext, $arr_ext))
+                {
+                    $rand_name = str_shuffle("abcdefghijklmnopqrstuvwxyz") . '-' .rand(11111,99999);
+                        //do the actual uploading of the file. First arg is the tmp name, second arg is where we are putting it
+                        move_uploaded_file($file['tmp_name'], WWW_ROOT . 'img/posts/' . 'post_' .$rand_name.'_featured_image.'.$ext);
+
+                        //prepare the filename for database entry
+                        //$dataSet['featured_image'] = $file['name'];
+                        $dataSet['featured_image'] = 'post_'.$rand_name.'_featured_image.'.$ext;
+                }else{
+                    $this->Session->setFlash(__('Please Upload Only JPG|JPEG|PNG Extension Image.', null), 'default', array('class' => 'alert alert-danger fade in'));
+                }
+            }else{
+                unset($dataSet['featured_image']);
+            }
+
+            if ($this->Post->validates()) {
+                if ($this->Post->save($dataSet)) {
+                    $this->Session->setFlash(__('Your blog has been successfully post', null), 'default', array('class' => 'alert alert-success fade in'));
+                    try {
+                       // $this->__sendNewUserEmail($dataSet);
+                    }  catch (Exception $ex) {
+                        $this->Session->setFlash(__($ex->getMessage()), 'default', array('class' => 'alert alert-danger fade in'));
+                    }
+                    return $this->redirect(array('action' => 'addBlog'));
+                } else {
+                    $this->Session->setFlash(__('The Blog could not be Submitted. Please, try again.'), 'default', array('class' => 'alert alert-danger fade in'));
+                }
+            } else {
+                $errors = $this->ModelName->validationErrors;
+                echo $errors;
+            }
+
+            
+        }
+
+        $this->set('title', COMPANY_NAME . ' - Post Blog');
+        
+        $this->set('userProfile', $userinfo['User']);
+        $allCategories = $this->Category->findAllCategoriesList();
+        $this->set('categories', $allCategories);
+    }
+
+    public function changePassword()
+    {
+        $userData = $this->Auth->user();
+        $id = $userData['id'];
+        $this->User->id = $id;
+        if ($this->User->exists()) {
+            if ($this->request->is('post') || $this->request->is('put')) {
+                $dataSet = $this->request->data;
+                if ($this->data['FrontendUsers']['password'] !== $this->data['FrontendUsers']['confirm_password']) {
+                 
+                    $this->Session->setFlash(__('Confirm password must match Password  .', null), 'default', array('class' => 'alert alert-danger fade in'));
+                    
+                }else{
+                    $encPass = AuthComponent::password($dataSet['FrontendUsers']['password']);
+                    $dataSet['User']['password']=$dataSet['FrontendUsers']['password'];
+                    unset($dataSet['FrontendUsers']['confirm_password']);
+                    if ($this->User->save($dataSet)) {
+                        $this->Session->setFlash(__('Password has been successfully updated', null), 'default', array('class' => 'alert alert-success fade in'));
+                        $this->redirect(array('action' => 'dashboard'));
+                    } else {
+                        $this->Session->setFlash(__('Unable to edit password. Please, try again.', null), 'default', array('class' => 'alert alert-danger fade in'));
+                        $this->redirect(array('action' => 'changePassword'));
+                    }
+                }
+                
+            }
+        } else {
+            $this->Session->setFlash(__('User does not exist.', null), 'default', array('class' => 'alert alert-danger fade in'));
+            $this->redirect(array('action' => 'profile'));
+        }
+        
+        $this->set('title', COMPANY_NAME . ' - Change Profile');
+
+        $userinfo=$this->User->getUserById($id);
+        $this->set('userProfile', $userinfo['User']);
     }
 }

@@ -27,6 +27,8 @@
 
 	Router::connect('/logout', array('controller' => 'FrontendUsers', 'action' => 'logout'));
 
+	Router::connect('/dashboard', array('controller' => 'FrontendUsers', 'action' => 'dashboard'));
+
 	Router::connect('/admin', array('controller' => 'users', 'action' => 'dashboard', 'admin'=>true));
 
 	//Router::connect('/admin', array('controller' => 'pages', 'action' => 'publication'));

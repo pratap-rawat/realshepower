@@ -1812,4 +1812,8 @@ span.active_form{
 
 .rsp_popUp{
     display: none;
+
+}
+.danger {
+    color: red;
 }

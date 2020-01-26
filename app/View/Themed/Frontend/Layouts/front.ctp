@@ -1,3 +1,15 @@
+<?php
+  $posts_module = false;
+  $currentControllerName = $this->params['controller'];
+  $currentActionName = $this->params['action'];
+  $controllers = array('FrontendUsers');
+  $actions = array('addBlog');
+  if(in_array($currentControllerName, $controllers) && in_array($currentActionName, $actions))
+  {
+    $posts_module = true;
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,6 +42,16 @@
     var base_url = '<?php echo $this->webroot;?>';
   </script>
   <?php echo $this->Html->script('script.js'); ?>
+  <?php
+    if($posts_module === true)
+    {
+  ?>
+      <?php echo $this->Html->script('ckeditor/ckeditor.js'); ?>
+      <?php echo $this->Html->script('ckeditor/sample.js'); ?>
+      <script> initSample(); </script>
+  <?php
+    }
+  ?>
 </body>
 <!-- Start : Social Share With Facebook -->
 <script>
@@ -56,6 +78,33 @@
 			console.log(response);
 		});
 	}
+
+  var values = [];
+  $("#add-label").on("click", function(e) {
+      var i = 0;
+      e.preventDefault();
+      var _val = $("#text-field").val();
+      if(_val !== '') {
+        _val = _val.trim();
+        _val = _val.toLowerCase();
+        if(values.indexOf(_val) < 0){
+          values.push(_val);
+            $("#label-box").append('<label class="label"><span>'+ _val +'</span><span class="close-label">x</span></label>');
+            $("#text-field").val('');
+            var labelInput = $("#labelInput").val();
+            if(labelInput == '') {
+                $("#labelInput").val(_val);
+            } else {
+                var newVal = labelInput + ',' + _val;                    
+                $("#labelInput").val(newVal);
+            }               
+              i++; 
+        }else{
+          alert('"' +_val + '" tag is already exist.');
+              $("#text-field").val('');
+        }
+      }
+  });
 </script>
 <!-- Start : Social Share With Facebook -->
 </html>
