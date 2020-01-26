@@ -69,8 +69,9 @@ class FrontendUsersController extends AppController
                 $output['status'] = false;
                 $output['message'] = 'Email already exist';
             } else if ($this->User->save($dataSet)) {
-                //pr($this->User->read()); die;
-                if ($this->Auth->login($this->User->read())) {
+                $userData=$this->User->read();
+                $mainUserData=$userData['User'];
+                if ($this->Auth->login($mainUserData)) {
                     $output['status'] = true;
                     $output['message'] = 'signup & login successful';
                 } else {
