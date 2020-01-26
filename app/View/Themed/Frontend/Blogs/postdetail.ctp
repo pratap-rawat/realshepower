@@ -78,7 +78,7 @@
 						<p>Share :</p>
 						<a href="#" onclick="sharethisToFB('<?php echo Router::url(null, true); ?>');"><i class="fab fa-facebook-f"></i></a>
 						<a href="#"><i class="fab fa-twitter"></i></a>
-						<a href="#"><i class="fab fa-whatsapp"></i></a>
+						<!-- <a href="#"><i class="fab fa-whatsapp"></i></a> -->
 					</div>
 					<!-- /.social_share -->
 					</div>
@@ -102,7 +102,7 @@
 											<?php echo date_format(date_create($comment['Comment']['created']), 'd M Y'); ?>
 										</time>
 										<p><?php echo $comment['Comment']['comment']; ?></p>
-										<a href="#">Reply <i class="fas fa-reply"></i></a>
+										<!-- <a href="#">Reply <i class="fas fa-reply"></i></a> -->
 									</div>
 									<!-- /.rsp_comment_text -->
 								</li>
