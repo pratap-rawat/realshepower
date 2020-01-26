@@ -289,17 +289,19 @@ class FrontendUsersController extends AppController
                  
                     $this->Session->setFlash(__('Confirm password must match Password  .', null), 'default', array('class' => 'alert alert-danger fade in'));
                     
+                }else{
+                    $encPass = AuthComponent::password($dataSet['FrontendUsers']['password']);
+                    $dataSet['User']['password']=$dataSet['FrontendUsers']['password'];
+                    unset($dataSet['FrontendUsers']['confirm_password']);
+                    if ($this->User->save($dataSet)) {
+                        $this->Session->setFlash(__('Password has been successfully updated', null), 'default', array('class' => 'alert alert-success fade in'));
+                        $this->redirect(array('action' => 'dashboard'));
+                    } else {
+                        $this->Session->setFlash(__('Unable to edit password. Please, try again.', null), 'default', array('class' => 'alert alert-danger fade in'));
+                        $this->redirect(array('action' => 'changePassword'));
+                    }
                 }
-                $encPass = AuthComponent::password($dataSet['FrontendUsers']['password']);
-                $dataSet['User']['password']=$dataSet['FrontendUsers']['password'];
-                unset($dataSet['FrontendUsers']['confirm_password']);
-                if ($this->User->save($dataSet)) {
-                    $this->Session->setFlash(__('Password has been successfully updated', null), 'default', array('class' => 'alert alert-success fade in'));
-                    $this->redirect(array('action' => 'dashboard'));
-                } else {
-                    $this->Session->setFlash(__('Unable to edit password. Please, try again.', null), 'default', array('class' => 'alert alert-danger fade in'));
-                    $this->redirect(array('action' => 'changePassword'));
-                }
+                
             }
         } else {
             $this->Session->setFlash(__('User does not exist.', null), 'default', array('class' => 'alert alert-danger fade in'));
