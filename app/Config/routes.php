@@ -8,12 +8,22 @@
 	//Router::connect('/', array('controller' => 'pages', 'action' => 'display', 'home'));
 	
 	Router::connect('/', array('controller' => 'pages', 'action' => 'home'));
+	
+	Router::connect('/aboutus', array('controller' => 'pages', 'action' => 'aboutus'));
 
 	Router::connect('/blog', array('controller' => 'Blogs', 'action' => 'index'));
-	Router::connect('/post/:slug', array('controller' => 'Blogs', 'action' => 'postdetail'), array('slug' => '[a-z0-9-]+', 'pass' => array('slug')));
+	
 	Router::connect('/blog/categories/:slug', array('controller' => 'Blogs', 'action' => 'index'), array('slug' => '[a-z-]+', 'pass' => array('slug')));
 
-	Router::connect('/aboutus', array('controller' => 'pages', 'action' => 'aboutus'));
+	Router::connect('/post/:slug', array('controller' => 'Blogs', 'action' => 'postdetail'), array('slug' => '[a-z0-9-]+', 'pass' => array('slug')));
+
+	Router::connect('/publication', array('controller' => 'pages', 'action' => 'publication'));
+
+	Router::connect('/pricing-plan', array('controller' => 'pages', 'action' => 'pricingplan'));
+
+	Router::connect('/help-us-grow', array('controller' => 'Pages', 'action' => 'helpusgrow'));
+
+	Router::connect('/contact', array('controller' => 'pages', 'action' => 'contact'));
 
 	Router::connect('/logout', array('controller' => 'FrontendUsers', 'action' => 'logout'));
 
@@ -21,7 +31,7 @@
 
 	Router::connect('/admin', array('controller' => 'users', 'action' => 'dashboard', 'admin'=>true));
 
-	Router::connect('/admin', array('controller' => 'pages', 'action' => 'publication'));
+	//Router::connect('/admin', array('controller' => 'pages', 'action' => 'publication'));
 
 
 /**
