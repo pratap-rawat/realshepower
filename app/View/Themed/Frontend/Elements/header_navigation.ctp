@@ -9,25 +9,38 @@
     <div class="collapse navbar-collapse text-center" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+          <!-- <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a> -->
+          <?php echo $this->Html->link('Home', '/', array('class'=>'nav-link')); ?>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/aboutus">ABOUT US</a>
+          <!-- <a class="nav-link" href="/aboutus">ABOUT US</a> -->
+          <?php echo $this->Html->link('About Us', '/aboutus', array('class'=>'nav-link')); ?>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" href="/blog">WRITERS</a>
-        </li>
+        </li> -->
         <li class="nav-item">
-          <a class="nav-link" href="#">ARTISTS</a>
+          <!-- <a class="nav-link" href="#">ARTISTS</a> -->
+          <?php echo $this->Html->link('Blog', '/blog', array('class'=>'nav-link')); ?>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" href="#">ENTERPRENURE</a>
+        </li> -->
+        <li class="nav-item">
+          <?php echo $this->Html->link('Publication', '/publication', array('class'=>'nav-link')); ?>
+        </li>
+
+        <li class="nav-item">
+          <?php echo $this->Html->link('pricing plan', '/pricing-plan', array('class'=>'nav-link')); ?>
+        </li>
+
+        <li class="nav-item">
+          <!-- <a class="nav-link" href="#">HELP US GROW!</a> -->
+          <?php echo $this->Html->link('Help Us grow!', '/help-us-grow', array('class'=>'nav-link')); ?>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">PUBLICATION</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">HELP US GROW!</a>
+          <!-- <a class="nav-link" href="#">HELP US GROW!</a> -->
+          <?php echo $this->Html->link('Contact', '/contact', array('class'=>'nav-link')); ?>
         </li>
       </ul>
         <a class="btn action-btn" href="#subscribe_section" type="submit">subscribe

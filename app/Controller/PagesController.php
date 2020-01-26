@@ -8,8 +8,8 @@ class PagesController extends AppController {
 	public function beforeFilter() {
         parent::beforeFilter();
         // Allow users to register and logout.
-        $this->Auth->allow('home');
-        echo $this->request->prefix;
+        $this->Auth->allow('home', 'aboutus', 'publication', 'contact', 'helpusgrow', 'pricingplan');
+        //echo $this->request->prefix;
     }
 
 	public function home() {
@@ -19,7 +19,22 @@ class PagesController extends AppController {
 	}
 
 	public function aboutus() {
-		//echo 'About'; die;
 		$this->set('title', COMPANY_NAME . ' - About Us Page');
+	}
+
+	public function publication() {
+		$this->set('title', COMPANY_NAME . ' - Publication Page');
+	}
+
+	public function contact() {
+		$this->set('title', COMPANY_NAME . ' - Contact Page');
+	}
+
+	public function helpusgrow() {
+		$this->set('title', COMPANY_NAME . ' - Help Us Grow Page');
+	}
+
+	public function pricingplan() {
+		$this->set('title', COMPANY_NAME . ' - Plans Pricing Page');
 	}
 }
